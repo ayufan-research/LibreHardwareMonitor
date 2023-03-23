@@ -81,6 +81,41 @@ namespace LibreHardwareMonitor.Hardware
             return null;
         }
 
+        public static bool WriteMemory(IntPtr baseAddress, byte[] data)
+        {
+            if (_mapPhysToLin != null && _unmapPhysicalMemory != null)
+            {
+                IntPtr pdwLinAddr = _mapPhysToLin(baseAddress, (uint)data.Length, out IntPtr pPhysicalMemoryHandle);
+                if (pdwLinAddr != IntPtr.Zero)
+                {
+                    Marshal.Copy(pdwLinAddr, data, 0, data.Length);
+                    _unmapPhysicalMemory(pPhysicalMemoryHandle, pdwLinAddr);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool WriteMemory<T>(IntPtr baseAddress, T buffer)
+        {
+            if (_mapPhysToLin == null || _unmapPhysicalMemory == null)
+            {
+                return false;
+            }
+
+            IntPtr pdwLinAddr = _mapPhysToLin(baseAddress, (uint)Marshal.SizeOf<T>(), out IntPtr pPhysicalMemoryHandle);
+            if (pdwLinAddr != IntPtr.Zero)
+            {
+                Marshal.StructureToPtr<T>(buffer, pdwLinAddr, false);
+                _unmapPhysicalMemory(pPhysicalMemoryHandle, pdwLinAddr);
+                return true;
+            }
+
+            return false;
+        }
+
         private static void DeleteDll()
         {
             try

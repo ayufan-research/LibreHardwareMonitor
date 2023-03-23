@@ -72,6 +72,8 @@ namespace LibreHardwareMonitor.Hardware.Motherboard.Lpc
 
                 if (DetectSmsc(port)) continue;
             }
+
+            _superIOs.Add(new Vlv0100(Chip.VLV0100));
         }
 
         public string GetReport()

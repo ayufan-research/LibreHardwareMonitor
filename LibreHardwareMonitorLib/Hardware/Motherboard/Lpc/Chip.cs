@@ -72,7 +72,9 @@ namespace LibreHardwareMonitor.Hardware.Motherboard.Lpc
         W83627THF = 0x8280,
         W83667HG = 0xA510,
         W83667HGB = 0xB350,
-        W83687THF = 0x8541
+        W83687THF = 0x8541,
+
+        VLV0100 = 0x9999
     }
 
     internal class ChipName
@@ -139,6 +141,8 @@ namespace LibreHardwareMonitor.Hardware.Motherboard.Lpc
                 case Chip.W83667HG: return "Winbond W83667HG";
                 case Chip.W83667HGB: return "Winbond W83667HG-B";
                 case Chip.W83687THF: return "Winbond W83687THF";
+
+                case Chip.VLV0100: return "Winbond VLV0100";
 
                 default: return "Unknown";
             }
